@@ -61,9 +61,7 @@ class EmptyView extends StatelessWidget {
               const SizedBox(height: AppTheme.spaceL),
               FilledButton(
                 onPressed: onAction,
-                style: FilledButton.styleFrom(
-                  minimumSize: const Size(180, 50),
-                ),
+                style: FilledButton.styleFrom(minimumSize: const Size(180, 50)),
                 child: Text(actionLabel!),
               ),
             ],

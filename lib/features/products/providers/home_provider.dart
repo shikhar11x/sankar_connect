@@ -71,7 +71,9 @@ class HomeProvider extends ChangeNotifier {
   /// second fetches the last [_recentCount] items, newest first.
   Future<List<Product>> _loadRecent() async {
     final ProductPage probe = await _repository.getProducts(limit: 1);
-    final int skip = probe.total > _recentCount ? probe.total - _recentCount : 0;
+    final int skip = probe.total > _recentCount
+        ? probe.total - _recentCount
+        : 0;
     final ProductPage page = await _repository.getProducts(
       limit: _recentCount,
       skip: skip,

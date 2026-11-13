@@ -60,9 +60,7 @@ class ErrorView extends StatelessWidget {
             const SizedBox(height: AppTheme.spaceL),
             FilledButton.icon(
               onPressed: onRetry,
-              style: FilledButton.styleFrom(
-                minimumSize: const Size(160, 50),
-              ),
+              style: FilledButton.styleFrom(minimumSize: const Size(160, 50)),
               icon: const Icon(Icons.refresh_rounded),
               label: const Text('Try again'),
             ),
