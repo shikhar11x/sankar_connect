@@ -7,7 +7,7 @@ import '../../../core/storage/local_storage.dart';
 /// so the user's choice survives an app restart.
 class ThemeProvider extends ChangeNotifier {
   ThemeProvider(this._storage)
-      : _themeMode = _decode(_storage.getString(StorageKeys.themeMode));
+    : _themeMode = _decode(_storage.getString(StorageKeys.themeMode));
 
   final LocalStorage _storage;
   ThemeMode _themeMode;

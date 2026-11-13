@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:material_ui/src/text_theme.dart' hide TextTheme;
 
 import 'app_colors.dart';
 
@@ -22,31 +23,36 @@ abstract final class AppTheme {
   static ThemeData _build(Brightness brightness) {
     final bool isDark = brightness == Brightness.dark;
 
-    final Color background =
-        isDark ? AppColors.darkBackground : AppColors.lightBackground;
-    final Color surface =
-        isDark ? AppColors.darkSurface : AppColors.lightSurface;
-    final Color textPrimary =
-        isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary;
-    final Color textSecondary =
-        isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary;
+    final Color background = isDark
+        ? AppColors.darkBackground
+        : AppColors.lightBackground;
+    final Color surface = isDark
+        ? AppColors.darkSurface
+        : AppColors.lightSurface;
+    final Color textPrimary = isDark
+        ? AppColors.darkTextPrimary
+        : AppColors.lightTextPrimary;
+    final Color textSecondary = isDark
+        ? AppColors.darkTextSecondary
+        : AppColors.lightTextSecondary;
     final Color border = isDark ? AppColors.darkBorder : AppColors.lightBorder;
     final Color primary = isDark ? AppColors.primaryLight : AppColors.primary;
 
-    final ColorScheme scheme = ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
-      brightness: brightness,
-    ).copyWith(
-      primary: primary,
-      onPrimary: Colors.white,
-      secondary: AppColors.secondary,
-      error: AppColors.error,
-      surface: surface,
-      onSurface: textPrimary,
-      onSurfaceVariant: textSecondary,
-      outline: border,
-      outlineVariant: border,
-    );
+    final ColorScheme scheme =
+        ColorScheme.fromSeed(
+          seedColor: AppColors.primary,
+          brightness: brightness,
+        ).copyWith(
+          primary: primary,
+          onPrimary: Colors.white,
+          secondary: AppColors.secondary,
+          error: AppColors.error,
+          surface: surface,
+          onSurface: textPrimary,
+          onSurfaceVariant: textSecondary,
+          outline: border,
+          outlineVariant: border,
+        );
 
     final TextTheme baseTextTheme = ThemeData(brightness: brightness).textTheme;
     final TextTheme textTheme = GoogleFonts.plusJakartaSansTextTheme(
@@ -156,9 +162,7 @@ abstract final class AppTheme {
         selectedColor: primary.withValues(alpha: 0.14),
         side: BorderSide(color: border),
         showCheckmark: false,
-        labelStyle: textTheme.labelLarge?.copyWith(
-          fontWeight: FontWeight.w600,
-        ),
+        labelStyle: textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w600),
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusL),
@@ -170,28 +174,30 @@ abstract final class AppTheme {
         height: 68,
         indicatorColor: primary.withValues(alpha: 0.14),
         surfaceTintColor: Colors.transparent,
-        labelTextStyle: WidgetStateProperty.resolveWith<TextStyle?>(
-          (Set<WidgetState> states) {
-            final bool selected = states.contains(WidgetState.selected);
-            return textTheme.labelMedium?.copyWith(
-              fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-              color: selected ? primary : textSecondary,
-            );
-          },
-        ),
-        iconTheme: WidgetStateProperty.resolveWith<IconThemeData?>(
-          (Set<WidgetState> states) {
-            final bool selected = states.contains(WidgetState.selected);
-            return IconThemeData(
-              color: selected ? primary : textSecondary,
-              size: 24,
-            );
-          },
-        ),
+        labelTextStyle: WidgetStateProperty.resolveWith<TextStyle?>((
+          Set<WidgetState> states,
+        ) {
+          final bool selected = states.contains(WidgetState.selected);
+          return textTheme.labelMedium?.copyWith(
+            fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+            color: selected ? primary : textSecondary,
+          );
+        }),
+        iconTheme: WidgetStateProperty.resolveWith<IconThemeData?>((
+          Set<WidgetState> states,
+        ) {
+          final bool selected = states.contains(WidgetState.selected);
+          return IconThemeData(
+            color: selected ? primary : textSecondary,
+            size: 24,
+          );
+        }),
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: isDark ? AppColors.darkBorder : AppColors.lightTextPrimary,
+        backgroundColor: isDark
+            ? AppColors.darkBorder
+            : AppColors.lightTextPrimary,
         contentTextStyle: textTheme.bodyMedium?.copyWith(color: Colors.white),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusS),
