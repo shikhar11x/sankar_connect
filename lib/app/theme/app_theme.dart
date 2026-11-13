@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:material_ui/src/text_theme.dart' hide TextTheme;
 
 import 'app_colors.dart';
 
@@ -20,42 +19,67 @@ abstract final class AppTheme {
   static ThemeData get light => _build(Brightness.light);
   static ThemeData get dark => _build(Brightness.dark);
 
+  /// Applies Plus Jakarta Sans to every style of the SDK [TextTheme].
+  ///
+  /// google_fonts 9 depends on the standalone material_ui package, whose
+  /// TextTheme type differs from the SDK's. Only TextStyle is shared by both,
+  /// so each style is converted individually instead of using
+  /// GoogleFonts.plusJakartaSansTextTheme().
+  static TextTheme _withFont(TextTheme base) {
+    TextStyle? font(TextStyle? style) {
+      return GoogleFonts.plusJakartaSans(textStyle: style);
+    }
+
+    return base.copyWith(
+      displayLarge: font(base.displayLarge),
+      displayMedium: font(base.displayMedium),
+      displaySmall: font(base.displaySmall),
+      headlineLarge: font(base.headlineLarge),
+      headlineMedium: font(base.headlineMedium),
+      headlineSmall: font(base.headlineSmall),
+      titleLarge: font(base.titleLarge),
+      titleMedium: font(base.titleMedium),
+      titleSmall: font(base.titleSmall),
+      bodyLarge: font(base.bodyLarge),
+      bodyMedium: font(base.bodyMedium),
+      bodySmall: font(base.bodySmall),
+      labelLarge: font(base.labelLarge),
+      labelMedium: font(base.labelMedium),
+      labelSmall: font(base.labelSmall),
+    );
+  }
+
   static ThemeData _build(Brightness brightness) {
     final bool isDark = brightness == Brightness.dark;
 
-    final Color background = isDark
-        ? AppColors.darkBackground
-        : AppColors.lightBackground;
-    final Color surface = isDark
-        ? AppColors.darkSurface
-        : AppColors.lightSurface;
-    final Color textPrimary = isDark
-        ? AppColors.darkTextPrimary
-        : AppColors.lightTextPrimary;
-    final Color textSecondary = isDark
-        ? AppColors.darkTextSecondary
-        : AppColors.lightTextSecondary;
+    final Color background =
+        isDark ? AppColors.darkBackground : AppColors.lightBackground;
+    final Color surface =
+        isDark ? AppColors.darkSurface : AppColors.lightSurface;
+    final Color textPrimary =
+        isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary;
+    final Color textSecondary =
+        isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary;
     final Color border = isDark ? AppColors.darkBorder : AppColors.lightBorder;
     final Color primary = isDark ? AppColors.primaryLight : AppColors.primary;
 
-    final ColorScheme scheme =
-        ColorScheme.fromSeed(
-          seedColor: AppColors.primary,
-          brightness: brightness,
-        ).copyWith(
-          primary: primary,
-          onPrimary: Colors.white,
-          secondary: AppColors.secondary,
-          error: AppColors.error,
-          surface: surface,
-          onSurface: textPrimary,
-          onSurfaceVariant: textSecondary,
-          outline: border,
-          outlineVariant: border,
-        );
+    final ColorScheme scheme = ColorScheme.fromSeed(
+      seedColor: AppColors.primary,
+      brightness: brightness,
+    ).copyWith(
+      primary: primary,
+      onPrimary: Colors.white,
+      secondary: AppColors.secondary,
+      error: AppColors.error,
+      surface: surface,
+      onSurface: textPrimary,
+      onSurfaceVariant: textSecondary,
+      outline: border,
+      outlineVariant: border,
+    );
 
     final TextTheme baseTextTheme = ThemeData(brightness: brightness).textTheme;
-    final TextTheme textTheme = GoogleFonts.plusJakartaSansTextTheme(
+    final TextTheme textTheme = _withFont(
       baseTextTheme,
     ).apply(bodyColor: textPrimary, displayColor: textPrimary);
 
@@ -80,7 +104,6 @@ abstract final class AppTheme {
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: <TargetPlatform, PageTransitionsBuilder>{
           TargetPlatform.android: ZoomPageTransitionsBuilder(),
-          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
         },
       ),
       appBarTheme: AppBarTheme(
@@ -162,7 +185,9 @@ abstract final class AppTheme {
         selectedColor: primary.withValues(alpha: 0.14),
         side: BorderSide(color: border),
         showCheckmark: false,
-        labelStyle: textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w600),
+        labelStyle: textTheme.labelLarge?.copyWith(
+          fontWeight: FontWeight.w600,
+        ),
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusL),
@@ -174,30 +199,29 @@ abstract final class AppTheme {
         height: 68,
         indicatorColor: primary.withValues(alpha: 0.14),
         surfaceTintColor: Colors.transparent,
-        labelTextStyle: WidgetStateProperty.resolveWith<TextStyle?>((
-          Set<WidgetState> states,
-        ) {
-          final bool selected = states.contains(WidgetState.selected);
-          return textTheme.labelMedium?.copyWith(
-            fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-            color: selected ? primary : textSecondary,
-          );
-        }),
-        iconTheme: WidgetStateProperty.resolveWith<IconThemeData?>((
-          Set<WidgetState> states,
-        ) {
-          final bool selected = states.contains(WidgetState.selected);
-          return IconThemeData(
-            color: selected ? primary : textSecondary,
-            size: 24,
-          );
-        }),
+        labelTextStyle: WidgetStateProperty.resolveWith<TextStyle?>(
+          (Set<WidgetState> states) {
+            final bool selected = states.contains(WidgetState.selected);
+            return textTheme.labelMedium?.copyWith(
+              fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+              color: selected ? primary : textSecondary,
+            );
+          },
+        ),
+        iconTheme: WidgetStateProperty.resolveWith<IconThemeData?>(
+          (Set<WidgetState> states) {
+            final bool selected = states.contains(WidgetState.selected);
+            return IconThemeData(
+              color: selected ? primary : textSecondary,
+              size: 24,
+            );
+          },
+        ),
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: isDark
-            ? AppColors.darkBorder
-            : AppColors.lightTextPrimary,
+        backgroundColor:
+            isDark ? AppColors.darkBorder : AppColors.lightTextPrimary,
         contentTextStyle: textTheme.bodyMedium?.copyWith(color: Colors.white),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusS),
