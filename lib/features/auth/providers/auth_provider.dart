@@ -50,7 +50,8 @@ class AuthProvider extends ChangeNotifier {
     final List<DemoAccount> accounts = _readAccounts();
 
     final bool exists = accounts.any(
-      (DemoAccount account) => _normalize(account.user.email) == normalizedEmail,
+      (DemoAccount account) =>
+          _normalize(account.user.email) == normalizedEmail,
     );
     if (exists) {
       return _fail('An account with this email already exists. Please log in.');
@@ -163,7 +164,10 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> _saveSession(AppUser user) async {
     await _storage.setBool(StorageKeys.isLoggedIn, true);
-    await _storage.setString(StorageKeys.currentUser, jsonEncode(user.toJson()));
+    await _storage.setString(
+      StorageKeys.currentUser,
+      jsonEncode(user.toJson()),
+    );
   }
 
   List<DemoAccount> _readAccounts() {

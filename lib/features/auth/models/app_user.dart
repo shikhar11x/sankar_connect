@@ -59,10 +59,7 @@ class DemoAccount {
   }
 
   Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      'user': user.toJson(),
-      'password': password,
-    };
+    return <String, dynamic>{'user': user.toJson(), 'password': password};
   }
 
   factory DemoAccount.fromJson(Map<String, dynamic> json) {
