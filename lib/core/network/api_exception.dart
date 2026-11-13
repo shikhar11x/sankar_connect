@@ -15,6 +15,7 @@ class ApiException implements Exception {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
+      case DioExceptionType.transformTimeout:
         return const ApiException(
           'The request timed out. Please check your connection and try again.',
         );
@@ -25,8 +26,10 @@ class ApiException implements Exception {
       case DioExceptionType.badResponse:
         final int? code = error.response?.statusCode;
         if (code == 404) {
-          return ApiException('We could not find what you were looking for.',
-              statusCode: code);
+          return ApiException(
+            'We could not find what you were looking for.',
+            statusCode: code,
+          );
         }
         if (code != null && code >= 500) {
           return ApiException(
@@ -34,8 +37,10 @@ class ApiException implements Exception {
             statusCode: code,
           );
         }
-        return ApiException('Something went wrong (error $code).',
-            statusCode: code);
+        return ApiException(
+          'Something went wrong (error $code).',
+          statusCode: code,
+        );
       case DioExceptionType.cancel:
         return const ApiException('The request was cancelled.');
       case DioExceptionType.badCertificate:
